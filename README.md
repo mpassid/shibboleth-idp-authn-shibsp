@@ -1,5 +1,9 @@
 # Shibboleth IdP v3: Shibboleth SP authentication
 
+[![License](http://img.shields.io/:license-mit-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/mpassid/shibboleth-idp-authn-shibsp.svg?branch=master)](https://travis-ci.org/mpassid/shibboleth-idp-authn-shibsp)
+[![Coverage Status](https://coveralls.io/repos/github/mpassid/shibboleth-idp-authn-shibsp/badge.svg?branch=master)](https://coveralls.io/github/mpassid/shibboleth-idp-authn-shibsp?branch=master)
+
 ## Overview
 
 This module implements an authentication flow for [Shibboleth Identity Provider v3](https://wiki.shibboleth.net/confluence/display/IDP30/Home) exploiting attributes provided by [Shibboleth Service Provider](https://shibboleth.net/products/service-provider.html). The module can be used for outsourcing the authentication to another SAML IdP instead of prompting and validating the user
