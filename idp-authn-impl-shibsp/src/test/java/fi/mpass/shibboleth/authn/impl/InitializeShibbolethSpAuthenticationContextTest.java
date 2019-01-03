@@ -50,7 +50,7 @@ import com.google.common.base.Functions;
 import fi.mpass.shibboleth.authn.context.ShibbolethSpAuthenticationContext;
 import fi.mpass.shibboleth.authn.impl.InitializeShibbolethSpAuthenticationContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.profile.context.RelyingPartyContext;
 import net.shibboleth.idp.saml.authn.principal.AuthnContextClassRefPrincipal;
 import net.shibboleth.idp.saml.authn.principal.AuthnContextDeclRefPrincipal;
@@ -60,7 +60,7 @@ import net.shibboleth.utilities.java.support.component.ComponentInitializationEx
 /**
  * Unit tests for {@link InitializeShibbolethSpAuthenticationContext}.
  */
-public class InitializeShibbolethSpAuthenticationContextTest extends PopulateAuthenticationContextTest {
+public class InitializeShibbolethSpAuthenticationContextTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
     private InitializeShibbolethSpAuthenticationContext action;

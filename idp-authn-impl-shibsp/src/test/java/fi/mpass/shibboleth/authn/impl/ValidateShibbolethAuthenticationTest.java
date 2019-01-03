@@ -38,7 +38,7 @@ import fi.mpass.shibboleth.authn.principal.impl.ShibAttributePrincipal;
 import fi.mpass.shibboleth.authn.principal.impl.ShibHeaderPrincipal;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 import net.shibboleth.idp.profile.ActionTestingSupport;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
@@ -46,7 +46,7 @@ import net.shibboleth.utilities.java.support.component.ComponentInitializationEx
 /**
  * Unit tests for {@link ValidateShibbolethAuthentication}.
  */
-public class ValidateShibbolethAuthenticationTest extends PopulateAuthenticationContextTest {
+public class ValidateShibbolethAuthenticationTest extends BaseAuthenticationContextTest {
     
     /** The action to be tested. */
     private ValidateShibbolethAuthentication action;

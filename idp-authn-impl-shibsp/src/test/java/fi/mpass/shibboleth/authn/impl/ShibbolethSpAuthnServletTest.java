@@ -36,14 +36,14 @@ import fi.mpass.shibboleth.authn.principal.impl.ShibHeaderPrincipal;
 import net.shibboleth.idp.authn.ExternalAuthentication;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.ExternalAuthenticationContext;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.impl.ExternalAuthenticationImpl;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 
 /**
  * Unit tests for {@link ShibbolethSpAuthnServlet}.
  */
-public class ShibbolethSpAuthnServletTest extends PopulateAuthenticationContextTest {
+public class ShibbolethSpAuthnServletTest extends BaseAuthenticationContextTest {
     
     /** The servlet to be tested. */
     ShibbolethSpAuthnServlet servlet;
