@@ -30,6 +30,7 @@ import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.profile.ActionTestingSupport;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -113,8 +114,8 @@ public class ExtractShibbolethAttributesFromRequestTest extends BaseAuthenticati
      * @throws ComponentInitializationException 
      */
     @Test
-    public void testSuccessWithPrefix() throws ComponentInitializationException {
-        testSuccess("AJP_");
+    public void testSuccessWithPrefixNoAttributes() throws ComponentInitializationException {
+        testSuccessNoAttributes("AJP_");
     }
     
     /**
@@ -123,18 +124,57 @@ public class ExtractShibbolethAttributesFromRequestTest extends BaseAuthenticati
      * @throws ComponentInitializationException 
      */
     @Test
-    public void testSuccessWithoutPrefix() throws ComponentInitializationException {
-        testSuccess("");
+    public void testSuccessWithoutPrefixNoAttributes() throws ComponentInitializationException {
+        testSuccessNoAttributes("");
+    }
+
+    /**
+     * Tests successful construction of {@link ShibbolethSpAuthenticationContext} with prefix in headers.
+     * 
+     * @throws ComponentInitializationException 
+     */
+    @Test
+    public void testSuccessWithPrefixWithAttributes() throws ComponentInitializationException {
+        testSuccessWithAttributes("AJP_");
     }
     
+    /**
+     * Tests successful construction of {@link ShibbolethSpAuthenticationContext} without prefix in headers.
+     * 
+     * @throws ComponentInitializationException 
+     */
+    @Test
+    public void testSuccessWithoutPrefixWithAttributes() throws ComponentInitializationException {
+        testSuccessWithAttributes("");
+    }
+
     /**
      * Tests successful construction of {@link ShibbolethSpAuthenticationContext}.
      * 
      * @param prefix The prefix for the headers.
      * @throws ComponentInitializationException 
      */
-    public void testSuccess(final String prefix) throws ComponentInitializationException {
+    public void testSuccessNoAttributes(final String prefix) throws ComponentInitializationException {
         action = new ExtractShibbolethAttributesFromRequest(prefix);
+        final ShibbolethSpAuthenticationContext shibCtx = testSuccess(action, prefix, 0);
+        Assert.assertEquals(shibCtx.getAttributes().get(expectedAttribute), null);
+    }
+
+    /**
+     * Tests successful construction of {@link ShibbolethSpAuthenticationContext}.
+     * 
+     * @param prefix The prefix for the headers.
+     * @throws ComponentInitializationException 
+     */
+    public void testSuccessWithAttributes(final String prefix) throws ComponentInitializationException {
+        action = new ExtractShibbolethAttributesFromRequest(prefix);
+        action.setAttributeNames(Arrays.asList(expectedAttribute));
+        final ShibbolethSpAuthenticationContext shibCtx = testSuccess(action, prefix, 1);
+        Assert.assertEquals(shibCtx.getAttributes().get(expectedAttribute), expectedAttribute);
+    }
+
+    protected ShibbolethSpAuthenticationContext testSuccess(ExtractShibbolethAttributesFromRequest action, String prefix,
+            int expectedAttributes) throws ComponentInitializationException {
         action.setHttpServletRequest(new MockHttpServletRequest());
         ((MockHttpServletRequest) action.getHttpServletRequest())
             .addHeader(prefix + ShibbolethSpAuthenticationContext.SHIB_SP_AUTHENTICATION_INSTANT, expectedInstant);
@@ -159,10 +199,10 @@ public class ExtractShibbolethAttributesFromRequestTest extends BaseAuthenticati
         Assert.assertEquals(shibCtx.getMethod(), expectedMethod);
         Assert.assertEquals(shibCtx.getContextClass(), expectedContextClass);
         Assert.assertEquals(shibCtx.getContextDecl(), expectedContextDecl);
-        Assert.assertEquals(shibCtx.getAttributes().size(), 1);
-        Assert.assertEquals(shibCtx.getAttributes().get(expectedAttribute), expectedAttribute);
+        Assert.assertEquals(shibCtx.getAttributes().size(), expectedAttributes);
         Assert.assertEquals(shibCtx.getHeaders().size(), 6);
         Assert.assertEquals(shibCtx.getHeaders().get(expectedHeader), expectedHeader);
+        return shibCtx;
     }
     
     /**

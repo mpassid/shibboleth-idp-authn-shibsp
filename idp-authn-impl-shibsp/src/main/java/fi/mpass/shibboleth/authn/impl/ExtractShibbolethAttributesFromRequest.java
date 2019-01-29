@@ -25,6 +25,7 @@ package fi.mpass.shibboleth.authn.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
@@ -34,6 +35,7 @@ import net.shibboleth.idp.authn.AbstractExtractionAction;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.ExternalAuthenticationContext;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 import org.opensaml.profile.action.ActionSupport;
@@ -67,6 +69,9 @@ public class ExtractShibbolethAttributesFromRequest extends AbstractExtractionAc
     
     /** The encoding for headers. If not set to null, the header values are transformed into UTF-8. */
     private String headerEncoding;
+    
+    /** The list of request attribute names (Apache environment variable names) to be fetched. */
+    private List<String> attributeNames;
 
     /**
      * Constructor.
@@ -85,6 +90,7 @@ public class ExtractShibbolethAttributesFromRequest extends AbstractExtractionAc
         variablePrefix = prefix;
         setExploitExternal(false);
         setHeaderEncoding(null);
+        setAttributeNames(null);
     }
 
     /**
@@ -109,6 +115,24 @@ public class ExtractShibbolethAttributesFromRequest extends AbstractExtractionAc
      */
     public void setHeaderEncoding(final String encoding) {
         headerEncoding = encoding;
+    }
+    
+    /**
+     * Set the list of request attribute names (Apache environment variable names) to be fetched.
+     * @param names What to set.
+     */
+    public void setAttributeNames(final List<String> names) {
+        attributeNames = names;
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    protected void doInitialize() throws ComponentInitializationException {
+        super.doInitialize();
+        if (attributeNames == null) {
+            log.warn("{} attributeNames property is set to null: no attributes " 
+                    + "(Apache environment variables) can be resolved", getLogPrefix());
+        }
     }
     
     /** {@inheritDoc} */
@@ -156,14 +180,14 @@ public class ExtractShibbolethAttributesFromRequest extends AbstractExtractionAc
                 final String value = StringSupport.trimOrNull(request.getHeader(header));
                 updateShibbolethContext(shibbolethContext, header, value, true);
             }
-            final Enumeration<String> attributeNames = request.getAttributeNames();
-            while (attributeNames.hasMoreElements()) {
-                final String name = attributeNames.nextElement();
-                if (request.getAttribute(name) instanceof String) {
-                    final String value = StringSupport.trimOrNull((String)request.getAttribute(name));
-                    updateShibbolethContext(shibbolethContext, name, value, false);
-                } else {
-                    log.debug("{} Ignoring request attribute {}", getLogPrefix(), name);
+            if (attributeNames != null) {
+                for (final String name : attributeNames) {
+                    if (request.getAttribute(name) instanceof String) {
+                        final String value = StringSupport.trimOrNull((String)request.getAttribute(name));
+                        updateShibbolethContext(shibbolethContext, name, value, false);
+                    } else {
+                        log.debug("{} Ignoring request attribute {}", getLogPrefix(), name);
+                    }
                 }
             }
         }
@@ -254,10 +278,12 @@ public class ExtractShibbolethAttributesFromRequest extends AbstractExtractionAc
                 
             }
         }
-        final Enumeration<String> attributeNames = request.getAttributeNames();
-        while (attributeNames.hasMoreElements()) {
-            final String attribute = attributeNames.nextElement();
-            log.trace("Attribute name {} has value {}", attribute, request.getAttribute(attribute));
+        if (attributeNames == null) {
+            log.warn("{} No attributeNames defined, cannot parse the values", getLogPrefix());
+        } else {
+            for (String attribute : attributeNames) {
+                log.trace("Attribute name {} has value {}", attribute, request.getAttribute(attribute));
+            }
         }
     }
 }
