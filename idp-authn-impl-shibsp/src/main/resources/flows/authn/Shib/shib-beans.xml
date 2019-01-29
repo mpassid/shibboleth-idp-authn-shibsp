@@ -44,9 +44,13 @@ THE SOFTWARE.
 
     <bean id="ExtractShibbolethHeadersFromRequest" class="fi.mpass.shibboleth.authn.impl.ExtractShibbolethAttributesFromRequest" scope="prototype"
         p:httpServletRequest-ref="shibboleth.HttpServletRequest"
-        p:trim="true">
+        p:trim="true" p:attributeNames-ref="attributeNames">
        <constructor-arg type="String" value="AJP_"/>
     </bean>
+
+    <util:list id="attributeNames" value-type="java.lang.String">
+        <value>eppn</value>
+    </util:list>
 
     <bean id="ExtractShibbolethPrincipals" class="fi.mpass.shibboleth.authn.impl.ExtractShibbolethAttributesFromRequest" scope="prototype"
         p:httpServletRequest-ref="shibboleth.HttpServletRequest"
