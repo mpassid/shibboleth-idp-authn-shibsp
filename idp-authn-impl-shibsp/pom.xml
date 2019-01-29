@@ -25,7 +25,7 @@ THE SOFTWARE.
     <parent>
         <groupId>fi.mpass</groupId>
         <artifactId>idp-authn-shibsp</artifactId>
-        <version>0.9.6-SNAPSHOT</version>
+        <version>0.9.6</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>idp-authn-impl-shibsp</artifactId>
