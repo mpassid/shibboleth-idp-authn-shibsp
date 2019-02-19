@@ -40,7 +40,7 @@ THE SOFTWARE.
             class="fi.mpass.shibboleth.authn.impl.ValidateShibbolethAuthentication" scope="prototype"
             p:classifiedMessages-ref="shibboleth.authn.Shib.ClassifiedMessageMap"
             p:resultCachingPredicate="#{getObject('shibboleth.authn.Shib.resultCachingPredicate')}"
-            p:usernameAttribute="eppn"/>
+            p:usernameAttribute="eppn" p:populateHeaders="false" p:populateAttributes="true" />
 
     <bean id="ExtractShibbolethHeadersFromRequest" class="fi.mpass.shibboleth.authn.impl.ExtractShibbolethAttributesFromRequest" scope="prototype"
         p:httpServletRequest-ref="shibboleth.HttpServletRequest"
