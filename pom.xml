@@ -30,7 +30,7 @@ THE SOFTWARE.
     </parent>
     <groupId>fi.mpass</groupId>
     <artifactId>idp-authn-shibsp</artifactId>
-    <version>0.9.7-SNAPSHOT</version>
+    <version>0.9.7</version>
     <packaging>pom</packaging>
 
     <modules>
